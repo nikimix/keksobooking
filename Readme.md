@@ -1,6 +1,6 @@
-# Личный проект «{{projectTitle}}»
+# Личный проект «{{Keksobooking}}»
 
-* Студент: [{{userName}}]({{userProfile}}).
+* Студент: [{{nikita}}]({{userProfile}}).
 * Наставник: `Неизвестно`.
 
 ---
