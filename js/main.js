@@ -1,10 +1,9 @@
-const getRandomIntNumber = function (minValue, maxValue) {
+const getRandomIntNumber = function (minValue = 1, maxValue = 10) {
   minValue = Math.ceil(Math.min(Math.abs(minValue)));
   maxValue = Math.floor(Math.max(Math.abs(maxValue)));
   const randomNumber = Math.floor(Math.random() * (maxValue - minValue + 1) + minValue);
   return randomNumber;
 };
-getRandomIntNumber(0,30);
 
 const getRandomFloatNumber = function (minValue, maxValue, digits = 1) {
   minValue = Math.ceil(Math.min(Math.abs(minValue)));
@@ -12,7 +11,6 @@ const getRandomFloatNumber = function (minValue, maxValue, digits = 1) {
   const randomNumber = Math.random() * (maxValue - minValue) + minValue;
   return randomNumber.toFixed(digits);
 };
-getRandomFloatNumber (0,30,3);
 
 const getAdressPicture = function() {
   const minNumber = 0;
@@ -24,44 +22,53 @@ const getAdressPicture = function() {
   return `img/avatars/user${numberUser}.png`;
 };
 
-// 1 создать массив из 10 сгенерерированных объектов.
-// нужно сгенерировать объект из следющих данных
-
-const obj= {
-  author: {field:''},
-  avatar: getAdressPicture(),
-  offer: {}
+const getTypeOfHousing = function() {
+  const typeOfHousing = ['palace', 'flat', 'house', 'bungalow' ,'hotel'];
+  return typeOfHousing[getRandomIntNumber(0, typeOfHousing.length-1)];
 };
-/*author, объект — описывает автора. Содержит одно поле:
 
-avatar, строка — адрес изображения вида img/avatars/user{{xx}}.png, где {{xx}} — это число от 1 до 10. Перед однозначными числами ставится 0. Например, 01, 02...10. Адреса изображений не повторяются.
+const getTimeCheckin = function() {
+  const timeCheckin = ['12:00', '13:00', '14:00'];
+  return timeCheckin[getRandomIntNumber(0, timeCheckin.length-1)];
+};
 
-offer, объект — содержит информацию об объявлении. Состоит из полей:
+const getTimeCheckout = () => getTimeCheckin();
 
-title, строка — заголовок предложения. Придумайте самостоятельно.
+const getFeatures = function() {
+  const arrFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  const randomNumber = getRandomIntNumber(0, arrFeatures.length-1);
+  const newArrFeatures = arrFeatures.slice(0, randomNumber+1);
+  return newArrFeatures;
+};
 
-address, строка — адрес предложения. Для простоты пусть пока составляется из географических координат по маске {{location.lat}}, {{location.lng}}.
+const getLinks = function() {
+  const arrLinks = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
+  const randomNumber = getRandomIntNumber(0, arrLinks.length-1);
+  const newArrLinks = arrLinks.slice(0, randomNumber+1);
+  return newArrLinks;
+};
 
-price, число — стоимость. Случайное целое положительное число.
+const generateAd = function() {
+  const ad = {};
+  ad.author = {};
+  ad.author.avatar = getAdressPicture();
+  ad.location = {};
+  ad.location.lat = getRandomFloatNumber(35.65000, 35.70000, 5);
+  ad.location.lng = getRandomFloatNumber(139.70000 , 139.80000,5);
+  ad.offer = {};
+  ad.offer.title = 'Уютная квартира, с хорошим дизайном и всем необходимым для комфортного жилья';
+  ad.offer.address = `${ad.location.lat}, ${ad.location.lng}`;
+  ad.offer.price = getRandomIntNumber();
+  ad.offer.type = getTypeOfHousing();
+  ad.offer.rooms = getRandomIntNumber();
+  ad.offer.guests = getRandomIntNumber();
+  ad.offer.checkin = getTimeCheckin();
+  ad.offer.checkout = getTimeCheckout();
+  ad.offer.photos = getLinks();
+  ad.offer.features = getFeatures();
+  ad.offer.description = '3 комнаты, раздельный сан-узел, кухня 7 квадратов, лоджия, и кладовое помещение';
 
-type, строка — одно из пяти фиксированных значений: palace, flat, house, bungalow или hotel.
+  return ad;
+};
 
-rooms, число — количество комнат. Случайное целое положительное число.
-
-guests, число — количество гостей, которое можно разместить. Случайное целое положительное число.
-
-checkin, строка — одно из трёх фиксированных значений: 12:00, 13:00 или 14:00.
-
-checkout, строка — одно из трёх фиксированных значений: 12:00, 13:00 или 14:00.
-
-features, массив строк — массив случайной длины из значений: wifi, dishwasher, parking, washer, elevator, conditioner. Значения не должны повторяться.
-
-description, строка — описание помещения. Придумайте самостоятельно.
-
-photos, массив строк — массив случайной длины из значений: https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg, https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg, https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg.
-
-location, объект — местоположение в виде географических координат. Состоит из двух полей:
-
-lat, число с плавающей точкой — широта, случайное значение от 35.65000 до 35.70000.
-
-lng, число с плавающей точкой — долгота, случайное значение от 139.70000 до 139.80000. */
+const ads = new Array(10).fill(null).map(() => generateAd());
