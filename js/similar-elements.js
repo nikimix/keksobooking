@@ -1,4 +1,4 @@
-import { generateDataAd } from './dataAd.js';
+import { generateDataAd } from './data-ad.js';
 const QUANTITY_AD = 10;
 const dataAds = new Array(QUANTITY_AD).fill(null).map(() => generateDataAd());
 const templateAd = document.querySelector('#card').content.querySelector('.popup');
