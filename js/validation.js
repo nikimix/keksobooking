@@ -92,33 +92,28 @@ window.addEventListener('load', () => {
 // validation number of guests in room
 const numberOfRoomsNode = adFormNode.querySelector('#room_number');
 const numberOfGuestsNode = adFormNode.querySelector('#capacity');
-const buttonSubmitNode = adFormNode.querySelector('.ad-form__submit');
 
 const checkRatio = (numberOfRooms, numberOfGuests, node) => {
   numberOfRooms = parseInt(numberOfRooms,10);
   numberOfGuests = parseInt(numberOfGuests,10);
   if (numberOfRooms>=numberOfGuests && numberOfGuests!==0 && numberOfRooms!==100) {
     showMessage(node,'');
-    buttonSubmitNode.disabled = false;
   }
   else if(numberOfRooms === 100 && numberOfGuests===0) {
     showMessage(node,'');
-    buttonSubmitNode.disabled = false;
   }
   else {
     showMessage(node,'Колличество гостей не соответствует комнате, выберете другой вариант');
-    buttonSubmitNode.disabled = true;
   }
+  numberOfRoomsNode.reportValidity();
 };
 
 numberOfRoomsNode.addEventListener('change', () => {
   checkRatio(numberOfRoomsNode.value, numberOfGuestsNode.value, numberOfRoomsNode);
-  numberOfRoomsNode.reportValidity();
 });
 
 numberOfGuestsNode.addEventListener('change', () => {
   checkRatio(numberOfRoomsNode.value, numberOfGuestsNode.value, numberOfGuestsNode);
-  numberOfGuestsNode.reportValidity();
 });
 
 window.addEventListener('load', () => {
