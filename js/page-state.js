@@ -1,8 +1,4 @@
-
-const form = document.querySelector('.ad-form');
-const filter = document.querySelector('.map__filters');
-
-const isNotActivePageState = () => {
+const enableInactiveState = (form, filter) => {
   form.classList.add('ad-form--disabled');
   form.querySelector('.ad-form-header').setAttribute('disbled', '');
   form.querySelectorAll('.ad-form__element').forEach((item) => {
@@ -15,17 +11,17 @@ const isNotActivePageState = () => {
   filter.querySelector('.map__features').setAttribute('disabled', '');
 };
 
-const isActivePageState = () => {
+const enableActiveState = (form, filter) => {
   form.classList.remove('ad-form--disabled');
-  form.querySelector('.ad-form-header').removeAttribute('disbled');
+  form.querySelector('.ad-form-header').removeAttribute('disabled');
   form.querySelectorAll('.ad-form__element').forEach((item) => {
-    item.removeAttribute('disbled');
+    item.removeAttribute('disabled');
   });
   filter.classList.remove('map__filters--disabled');
   filter.querySelectorAll('.map__filter').forEach((item) => {
-    item.removeAttribute('disbled');
+    item.removeAttribute('disabled');
   });
-  filter.querySelector('.map__features').removeAttribute('disbled');
+  filter.querySelector('.map__features').removeAttribute('disabled');
 };
-export {isNotActivePageState};
-export {isActivePageState};
+export {enableInactiveState};
+export {enableActiveState};

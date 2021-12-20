@@ -13,7 +13,7 @@ const getRandomFloatNumber = (minValue, maxValue, digits = 1) => {
 };
 
 const getAdressPicture = () => {
-  const minNumber = 0;
+  const minNumber = 1;
   const maxNumber = 10;
   const numberUser = getRandomIntNumber(minNumber, maxNumber).toString();
   if(numberUser.length === 1) {
@@ -32,10 +32,10 @@ const getTimeCheckin = () => {
   return timeCheckin[getRandomIntNumber(0, timeCheckin.length-1)];
 };
 
-const getTimeCheckout = () => {
-  const timeCheckout = ['12:00', '13:00', '14:00'];
-  return timeCheckout[getRandomIntNumber(0, timeCheckout.length-1)];
-};
+// const getTimeCheckout = () => {
+//   const timeCheckout = ['12:00', '13:00', '14:00'];
+//   return timeCheckout[getRandomIntNumber(0, timeCheckout.length-1)];
+// };
 
 const getFeatures = () => {
   const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -66,7 +66,7 @@ const generateDataAd = () => {
   data.offer.rooms = getRandomIntNumber(1,4);
   data.offer.guests = getRandomIntNumber(1,4);
   data.offer.checkin = getTimeCheckin();
-  data.offer.checkout = getTimeCheckout();
+  data.offer.checkout = data.offer.checkin;
   data.offer.photos = getLinksPhotos();
   data.offer.features = getFeatures();
   data.offer.description = 'раздельный сан-узел, кухня 7 квадратов, лоджия, и кладовое помещение';
