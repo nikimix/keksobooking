@@ -105,7 +105,7 @@ const checkRatio = (numberOfRooms, numberOfGuests, node) => {
   else {
     showMessage(node,'Колличество гостей не соответствует комнате, выберете другой вариант');
   }
-  numberOfRoomsNode.reportValidity();
+  node.reportValidity();
 };
 
 numberOfRoomsNode.addEventListener('change', () => {
@@ -114,8 +114,4 @@ numberOfRoomsNode.addEventListener('change', () => {
 
 numberOfGuestsNode.addEventListener('change', () => {
   checkRatio(numberOfRoomsNode.value, numberOfGuestsNode.value, numberOfGuestsNode);
-});
-
-window.addEventListener('load', () => {
-  checkRatio(numberOfRoomsNode.value, numberOfGuestsNode.value, numberOfRoomsNode);
 });
