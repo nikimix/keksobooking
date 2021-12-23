@@ -2,7 +2,6 @@ import { generateDataAd } from './data-ad.js';
 const NUMBER_OF_ADS = 10;
 const dataAds = new Array(NUMBER_OF_ADS).fill(null).map(() => generateDataAd());
 const templateAd = document.querySelector('#card').content.querySelector('.popup');
-const boardAd = document.querySelector('#map-canvas');
 const ads = document.createDocumentFragment();
 const dictionaryTypeOfHousing = {
   flat : 'Квартира',
@@ -43,7 +42,7 @@ const createAds = () => {
     ad.querySelector('.popup__avatar').src = author.avatar;
     ads.appendChild(ad);
   });
-  boardAd.appendChild(ads);
 };
 
+export {ads};
 export {createAds};
