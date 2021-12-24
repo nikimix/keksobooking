@@ -1,12 +1,9 @@
-import { generateDataAd } from './data-ad.js';
+import { dataAds } from './main.js';
 import { createAd } from './ads.js';
-import {enableInactiveState} from './page-state.js';
-import {enableActiveState} from './page-state.js';
-const NUMBER_OF_ADS = 10;
-const dataAds = new Array(NUMBER_OF_ADS).fill(null).map(() => generateDataAd());
+import { enableActiveState } from './page-state.js';
+import { formNode, filterNode } from './main.js';
 
-const formNode = document.querySelector('.ad-form');
-const filterNode = document.querySelector('.map__filters');
+
 const addressNode = document.querySelector('#address');
 
 const coordinatesMainMarker = {
@@ -15,27 +12,29 @@ const coordinatesMainMarker = {
 };
 const {lat,lng} = coordinatesMainMarker;
 
-enableInactiveState(formNode, filterNode);
-
 // added map
-const map = L.map('map-canvas').on('load', () => {
-  enableActiveState(formNode, filterNode);
-  addressNode.value = `${lat}, ${lng}`;
-}).setView({
-  lat : lat,
-  lng : lng,
-},10);
+const map = L.map('map-canvas');
+
+const loadMap = () => {
+  map.on('load', () => {
+    enableActiveState(formNode, filterNode);
+    addressNode.value = `${lat}, ${lng}`;
+  }).setView({
+    lat : lat,
+    lng : lng,
+  },10);
+
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+  }).addTo(map);
+};
 
 // added layer
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-  maxZoom: 18,
-  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  id: 'mapbox/streets-v11',
-  tileSize: 512,
-  zoomOffset: -1,
-}).addTo(map);
-
 //added icon marker's
 const mainPinIcon = L.icon({
   iconUrl : 'img/main-pin.svg',
@@ -49,7 +48,6 @@ const pinIcon = L.icon({
   iconAnchor : [20,52],
 });
 
-
 // create and added marker
 const mainPinMarker = L.marker(
   {
@@ -60,7 +58,11 @@ const mainPinMarker = L.marker(
     draggable: true,
     icon: mainPinIcon,
   },
-).addTo(map);
+);
+
+const addedMainMarker = () => {
+  mainPinMarker.addTo(map);
+};
 
 mainPinMarker.on('moveend', (evt) => {
   const coordinates = evt.target.getLatLng();
@@ -68,14 +70,17 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 // added ads on map
-dataAds.forEach(({offer, author, location}) => {
-  L.marker(
-    {
-      lat : location.lat,
-      lng : location.lng,
-    },
-    {
-      icon: pinIcon,
-    }).addTo(map).bindPopup(createAd({offer, author}));
-});
+const addedAdsOnMap = () => {
+  dataAds.forEach(({offer, author, location}) => {
+    L.marker(
+      {
+        lat : location.lat,
+        lng : location.lng,
+      },
+      {
+        icon: pinIcon,
+      }).addTo(map).bindPopup(createAd({offer, author}));
+  });
+};
 
+export {loadMap, addedMainMarker, addedAdsOnMap};
