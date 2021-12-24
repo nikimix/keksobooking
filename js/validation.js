@@ -99,7 +99,7 @@ const checkRatio = (numberOfRooms, numberOfGuests, node) => {
   if (numberOfRooms>=numberOfGuests && numberOfGuests!==0 && numberOfRooms!==100) {
     showMessage(node,'');
   }
-  else if(numberOfRooms === 100 && numberOfGuests===0) {
+  else if(numberOfRooms === 100 && numberOfGuests === 0) {
     showMessage(node,'');
   }
   else {

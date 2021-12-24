@@ -74,4 +74,6 @@ const generateDataAd = () => {
   return data;
 };
 
-export {generateDataAd};
+const NUMBER_OF_ADS = 10;
+const dataAds = new Array(NUMBER_OF_ADS).fill(null).map(() => generateDataAd());
+export {dataAds};
