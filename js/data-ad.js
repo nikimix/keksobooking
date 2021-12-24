@@ -1,4 +1,4 @@
-const getRandomIntNumber = (minValue = 1, maxValue = 4) => {
+const getRandomIntNumber = (minValue, maxValue) => {
   minValue = Math.ceil(Math.min(Math.abs(minValue)));
   maxValue = Math.floor(Math.max(Math.abs(maxValue)));
   const randomNumber = Math.floor(Math.random() * (maxValue - minValue + 1) + minValue);
@@ -63,8 +63,8 @@ const generateDataAd = () => {
   data.offer.address = `${data.location.lat}, ${data.location.lng}`;
   data.offer.price = getRandomIntNumber(200, 1000);
   data.offer.type = getTypeOfHousing();
-  data.offer.rooms = getRandomIntNumber(1,4);
-  data.offer.guests = getRandomIntNumber(1,4);
+  data.offer.rooms = getRandomIntNumber(1,3);
+  data.offer.guests = getRandomIntNumber(1,3);
   data.offer.checkin = getTimeCheckin();
   data.offer.checkout = data.offer.checkin;
   data.offer.photos = getLinksPhotos();

@@ -1,17 +1,21 @@
+import { generateDataAd } from './data-ad.js';
+import { createAd } from './ads.js';
 import {enableInactiveState} from './page-state.js';
 import {enableActiveState} from './page-state.js';
-import {ads} from './ads.js';
+const NUMBER_OF_ADS = 10;
+const dataAds = new Array(NUMBER_OF_ADS).fill(null).map(() => generateDataAd());
 
 const formNode = document.querySelector('.ad-form');
 const filterNode = document.querySelector('.map__filters');
-enableInactiveState(formNode, filterNode);
-
 const addressNode = document.querySelector('#address');
-const startCoordinates = {
+
+const coordinatesMainMarker = {
   lat : 35.6894,
   lng : 139.6920,
 };
-const {lat,lng} = startCoordinates;
+const {lat,lng} = coordinatesMainMarker;
+
+enableInactiveState(formNode, filterNode);
 
 // added map
 const map = L.map('map-canvas').on('load', () => {
@@ -39,6 +43,13 @@ const mainPinIcon = L.icon({
   iconAnchor : [26,52],
 });
 
+const pinIcon = L.icon({
+  iconUrl : 'img/pin.svg',
+  iconSize : [40,40],
+  iconAnchor : [20,52],
+});
+
+
 // create and added marker
 const mainPinMarker = L.marker(
   {
@@ -55,3 +66,16 @@ mainPinMarker.on('moveend', (evt) => {
   const coordinates = evt.target.getLatLng();
   addressNode.value = `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
 });
+
+// added ads on map
+dataAds.forEach(({offer, author, location}) => {
+  L.marker(
+    {
+      lat : location.lat,
+      lng : location.lng,
+    },
+    {
+      icon: pinIcon,
+    }).addTo(map).bindPopup(createAd({offer, author}));
+});
+
