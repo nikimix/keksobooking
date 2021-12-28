@@ -52,28 +52,32 @@ const getLinksPhotos = () => {
 };
 
 const generateDataAd = () => {
-  const data = {};
-  data.author = {};
-  data.author.avatar = getAdressPicture();
-  data.location = {};
-  data.location.lat = getRandomFloatNumber(35.65000, 35.70000, 5);
-  data.location.lng = getRandomFloatNumber(139.70000 , 139.80000,5);
-  data.offer = {};
-  data.offer.title = 'Уютная квартира, с хорошим дизайном и всем необходимым для комфортного жилья';
-  data.offer.address = `${data.location.lat}, ${data.location.lng}`;
-  data.offer.price = getRandomIntNumber(200, 1000);
-  data.offer.type = getTypeOfHousing();
-  data.offer.rooms = getRandomIntNumber(1,3);
-  data.offer.guests = getRandomIntNumber(1,3);
-  data.offer.checkin = getTimeCheckin();
-  data.offer.checkout = data.offer.checkin;
-  data.offer.photos = getLinksPhotos();
-  data.offer.features = getFeatures();
-  data.offer.description = 'раздельный сан-узел, кухня 7 квадратов, лоджия, и кладовое помещение';
-
-  return data;
+  const checkin = getTimeCheckin();
+  const lat = getRandomFloatNumber(35.65000, 35.70000, 5);
+  const lng = getRandomFloatNumber(139.70000 , 139.80000,5);
+  return {
+    author: {
+      avatar: getAdressPicture(),
+    },
+    location: {
+      lat: lat,
+      lng: lng,
+    },
+    offer: {
+      title: 'Уютная квартира, с хорошим дизайном и всем необходимым для комфортного жилья',
+      address: `${lat}, ${lng}`,
+      price: getRandomIntNumber(200, 1000),
+      type: getTypeOfHousing(),
+      rooms: getRandomIntNumber(1,3),
+      guests: getRandomIntNumber(1,3),
+      checkin: checkin,
+      checkout: checkin,
+      photos: getLinksPhotos(),
+      features: getFeatures(),
+      description: 'раздельный сан-узел, кухня 7 квадратов, лоджия, и кладовое помещение',
+    },
+  };
 };
-
 const NUMBER_OF_ADS = 10;
 const dataAds = new Array(NUMBER_OF_ADS).fill(null).map(() => generateDataAd());
 export {dataAds};

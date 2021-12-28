@@ -1,13 +1,12 @@
-const dictionaryTypeOfHousing = {
-  flat : 'Квартира',
-  bungalow : 'Бунгало',
-  house : 'Дом',
-  place : 'Дворец',
-  hotel : 'Отель',
-};
-const templateAd = document.querySelector('#card').content.querySelector('.popup');
 const createAd = ({offer, author}) => {
-  const ad = templateAd.cloneNode(true);
+  const ad = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
+  const dictionaryTypeOfHousing = {
+    flat : 'Квартира',
+    bungalow : 'Бунгало',
+    house : 'Дом',
+    palace : 'Дворец',
+    hotel : 'Отель',
+  };
   ad.querySelector('.popup__title').textContent = offer.title;
   ad.querySelector('.popup__text--address').textContent = offer.address;
   const price = ad.querySelector('.popup__text--price');

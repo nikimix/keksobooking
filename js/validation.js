@@ -1,5 +1,5 @@
-const MIN_LENGTH_TITLE = 30;
-const MAX_LENGTH_TITLE = 100;
+const MIN_LENGTH = 30;
+const MAX_LENGTH = 100;
 const MAX_PRICE = 1000000;
 const adFormNode = document.querySelector('.ad-form');
 const titleAdNode = adFormNode.querySelector('#title');
@@ -11,11 +11,11 @@ const showMessage = (node,message) => {
 // validation title
 const checkLength = (node) => {
   const stringLength = node.value.length;
-  if(stringLength < MIN_LENGTH_TITLE) {
-    showMessage(node,`Минимальное колличество символов 30 не хватает ${MIN_LENGTH_TITLE - stringLength} символов`);
+  if(stringLength < MIN_LENGTH) {
+    showMessage(node,`Минимальное колличество символов 30 не хватает ${MIN_LENGTH - stringLength} символов`);
   }
-  else if(stringLength > MAX_LENGTH_TITLE) {
-    showMessage(node,`Максимальное колличество символов 100 превышен лимит в ${stringLength - MAX_LENGTH_TITLE} символов`);
+  else if(stringLength > MAX_LENGTH) {
+    showMessage(node,`Максимальное колличество символов 100 превышен лимит в ${stringLength - MAX_LENGTH} символов`);
   }
   else {
     showMessage(node,'');
@@ -94,16 +94,16 @@ const numberOfRoomsNode = adFormNode.querySelector('#room_number');
 const numberOfGuestsNode = adFormNode.querySelector('#capacity');
 
 const checkRatio = (numberOfRooms, numberOfGuests, node) => {
-  numberOfRooms = parseInt(numberOfRooms,10);
-  numberOfGuests = parseInt(numberOfGuests,10);
-  if (numberOfRooms>=numberOfGuests && numberOfGuests!==0 && numberOfRooms!==100) {
-    showMessage(node,'');
+  numberOfRooms = parseInt(numberOfRooms, 10);
+  numberOfGuests = parseInt(numberOfGuests, 10);
+  if (numberOfRooms >= numberOfGuests && numberOfGuests !== 0 && numberOfRooms !== 100) {
+    node.setCustomValidity('');
   }
   else if(numberOfRooms === 100 && numberOfGuests === 0) {
-    showMessage(node,'');
+    node.setCustomValidity('');
   }
   else {
-    showMessage(node,'Колличество гостей не соответствует комнате, выберете другой вариант');
+    node.setCustomValidity('Колличество гостей не соответствует комнате, выберете другой вариант');
   }
   node.reportValidity();
 };
