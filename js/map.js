@@ -1,80 +1,78 @@
-import { dataAds } from './data-ad.js';
-import { createAd } from './ads.js';
-import { enableActiveState } from './page-state.js';
-const addressNode = document.querySelector('#address');
+import { createAd } from './template.js';
+import { enableInactiveState, enableActiveState } from './page-state.js';
+const LAT = 35.6894;
+const LNG = 139.6920;
+const containerForMap = 'map-canvas';
+const addressElement = document.querySelector('#address');
 
-const coordinatesMainMarker = {
-  lat : 35.6894,
-  lng : 139.6920,
+enableInactiveState();
+
+const setAddressDefault = () => {
+  addressElement.value = `${LAT.toFixed(4)}, ${LNG.toFixed(4)}`;
 };
-const {lat,lng} = coordinatesMainMarker;
 
-// added map
-const map = L.map('map-canvas');
-
-const addMap = () => {
-  map.on('load', () => {
-    enableActiveState();
-    addressNode.value = `${lat}, ${lng}`;
-  }).setView({
-    lat : lat,
-    lng : lng,
+const map = L.map(containerForMap).on('load', () => {
+  enableActiveState();
+  setAddressDefault();
+})
+  .setView({
+    lat: LAT,
+    lng: LNG,
   },10);
 
-  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-  }).addTo(map);
-};
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+  maxZoom: 18,
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  id: 'mapbox/streets-v11',
+  tileSize: 512,
+  zoomOffset: -1,
+}).addTo(map);
 
-
-// added layer
-//added icon marker's
-const mainPinIcon = L.icon({
-  iconUrl : 'img/main-pin.svg',
-  iconSize : [52,52],
-  iconAnchor : [26,52],
+const iconMainMarker = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52,52],
+  iconAnchor: [26,52],
 });
 
-// create and added marker
-const mainPinMarker = L.marker(
+const mainMarker =  L.marker(
   {
-    lat : lat,
-    lng : lng,
+    lat: LAT,
+    lng: LNG,
   },
   {
     draggable: true,
-    icon: mainPinIcon,
+    icon: iconMainMarker,
   },
 ).addTo(map);
 
-mainPinMarker.on('moveend', (evt) => {
-  const coordinates = evt.target.getLatLng();
-  addressNode.value = `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
+const setCoordinatesMarkerInField = (marker, field) => {
+  const coordinates = marker.getLatLng();
+  field.value = `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
+};
+
+mainMarker.on('moveend', (evt) => {
+  setCoordinatesMarkerInField(evt.target, addressElement);
 });
 
-// added ads on map
 const pinIcon = L.icon({
   iconUrl : 'img/pin.svg',
   iconSize : [40,40],
   iconAnchor : [20,52],
 });
 
-const addAdsToMap = () => {
-  dataAds.forEach(({offer, author, location}) => {
-    L.marker(
-      {
-        lat : location.lat,
-        lng : location.lng,
-      },
-      {
-        icon: pinIcon,
-      })
-      .addTo(map)
+const createPinMarker = (lat, lng) => L.marker(
+  {
+    lat : lat,
+    lng : lng,
+  },
+  {
+    icon: pinIcon,
+  }).addTo(map);
+
+const addAdsToMap = (data) => {
+  data.forEach(({offer, author, location}) => {
+    createPinMarker(location.lat, location.lng)
       .bindPopup(
         createAd({offer, author}),
         {
@@ -84,4 +82,28 @@ const addAdsToMap = () => {
   });
 };
 
-export {addMap,addAdsToMap};
+const setViewMapDefault = () => {
+  map.setView({
+    lat: LAT,
+    lng: LNG,
+  },10);
+};
+
+const setPositinMainMarkerDefault = () => {
+  mainMarker.setLatLng(
+    {
+      lat: LAT,
+      lng: LNG,
+    },
+  );
+};
+
+document.querySelector('.ad-form__reset').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  setAddressDefault();
+  setViewMapDefault();
+  setPositinMainMarkerDefault();
+});
+
+export { addAdsToMap };
+export { setAddressDefault, setViewMapDefault, setPositinMainMarkerDefault };
