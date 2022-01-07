@@ -1,18 +1,16 @@
 import { createAd } from './template.js';
-import { enableInactiveState, enableActiveState } from './page-state.js';
+import { onActiveStateFormAd } from './form-state.js';
 const LAT = 35.6894;
 const LNG = 139.6920;
 const containerForMap = 'map-canvas';
 const addressElement = document.querySelector('#address');
-
-enableInactiveState();
 
 const setAddressDefault = () => {
   addressElement.value = `${LAT.toFixed(4)}, ${LNG.toFixed(4)}`;
 };
 
 const map = L.map(containerForMap).on('load', () => {
-  enableActiveState();
+  onActiveStateFormAd();
   setAddressDefault();
 })
   .setView({
@@ -71,6 +69,7 @@ const createPinMarker = (lat, lng) => L.marker(
   }).addTo(map);
 
 const addAdsToMap = (data) => {
+  // const filteredArray = data.filter(({offer}) => offer.type !== 'flat').slice(0,10);
   data.forEach(({offer, author, location}) => {
     createPinMarker(location.lat, location.lng)
       .bindPopup(

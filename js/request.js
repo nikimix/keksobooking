@@ -1,3 +1,4 @@
+import { onActiveStateFormFilter } from './form-state.js';
 const getDataAds = (setData, onError) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
     .then((response) => {
@@ -9,7 +10,8 @@ const getDataAds = (setData, onError) => {
       }
     })
     .then((response) => {
-      setData(response.slice(0,10));
+      setData(response);
+      onActiveStateFormFilter();
     })
     .catch((err) => {
       onError(err);

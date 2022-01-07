@@ -21,7 +21,7 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-const setStateFormDefault = () => {
+const setFieldsValueDefault = () => {
   document.querySelector('.ad-form').reset();
   setAddressDefault();
   setViewMapDefault();
@@ -76,5 +76,5 @@ const showMessageError = () => {
   document.addEventListener('click', onClick);
 };
 
-export { setStateFormDefault };
+export { setFieldsValueDefault };
 export { showAlert, showMessageSuccess, showMessageError };
