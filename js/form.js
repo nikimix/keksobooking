@@ -27,6 +27,10 @@ const setFieldsValueDefault = () => {
   setPositinMainMarkerDefault();
   setCoordinatesMarkerInField();
   document.querySelector('#price').placeholder = getMinPriceHousing(document.querySelector('#type').value);
+  if(document.querySelector('.ad-form__photo').firstElementChild) {
+    document.querySelector('.ad-form__photo').firstElementChild.remove();
+  }
+  document.querySelector('.ad-form-header__preview').firstElementChild.src = 'img/muffin-grey.svg';
 };
 
 const getAdRank = (ad) => {
