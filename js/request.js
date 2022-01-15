@@ -1,24 +1,27 @@
 import { onActiveStateFormFilter } from './form-state.js';
-const getDataAds = (setData, onError) => {
+import { showErrorAlert, showSuccessMessage, showErrorMessage } from './api.js';
+import { addAdsToMap } from './map.js';
+
+const getDataAds = (cb) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if(response.ok) {
         return response.json();
       } else {
-        onError();
         throw new Error(`${response.status} ${response.statusText}`);
       }
     })
     .then((response) => {
-      setData(response);
+      addAdsToMap(response);
       onActiveStateFormFilter();
+      cb(response);
     })
     .catch((err) => {
-      onError(err);
+      showErrorAlert(err);
     });
 };
 
-const sendUserForm = (onSuccess, onError, resetForm) => {
+const sendUserForm = (resetForm) => {
   fetch('https://23.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
@@ -26,15 +29,15 @@ const sendUserForm = (onSuccess, onError, resetForm) => {
     })
     .then((response) => {
       if(response.ok) {
-        onSuccess();
+        showSuccessMessage();
         resetForm();
       } else {
-        onError();
+        showErrorMessage();
         throw new Error(`${response.status} ${response.statusText}`);
       }
     })
     .catch(() => {
-      onError();
+      showErrorMessage();
     });
 };
 

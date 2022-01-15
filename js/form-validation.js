@@ -4,21 +4,34 @@ const priceForNightElement = adFormElement.querySelector('#price');
 const typeOfHousingElement = adFormElement.querySelector('#type');
 const timeCheckinElement = adFormElement.querySelector('#timein');
 const timeCheckoutElement = adFormElement.querySelector('#timeout');
-const dictionaryMinPriceForHousing = {
-  'bungalow' : 0,
-  'flat' : 1000,
-  'hotel' : 3000,
-  'house' : 5000,
-  'palace' : 10000,
+const MAX_GUEST = 100;
+
+const getMinPriceHousing = (typeHousing) => {
+  switch(typeHousing) {
+    case 'bungalow':
+      return 0;
+    case 'flat':
+      return 1000;
+    case 'hotel':
+      return 3000;
+    case 'house':
+      return 5000;
+    case 'palace':
+      return 10000;
+  }
+};
+
+const setValidationMessages = (item, message) => {
+  item.setCustomValidity(message);
 };
 
 const checkLength = (element) => {
   if(element.validity.tooShort) {
     const minLength = element.getAttribute('minlength');
-    element.setCustomValidity(`Минимальное колличество символов ${minLength} не хватает ${minLength - element.value.length} символов`);
+    setValidationMessages(element,`Минимальное колличество символов ${minLength} не хватает ${minLength - element.value.length} символов`);
   }
   else {
-    element.setCustomValidity('');
+    setValidationMessages(element,'');
   }
   element.reportValidity();
 };
@@ -30,13 +43,13 @@ titleAdElement.addEventListener('input', () => {
 
 const checkMinMax = (element) => {
   if(element.validity.rangeUnderflow) {
-    element.setCustomValidity(`Минимальное значение ${element.min}`);
+    setValidationMessages(element,`Минимальное значение ${element.min}`);
   }
   else if(element.validity.rangeOverflow) {
-    element.setCustomValidity(`Максимальное значение ${element.max}`);
+    setValidationMessages(element,`Максимальное значение ${element.max}`);
   }
   else {
-    element.setCustomValidity('');
+    setValidationMessages(element,'');
   }
   element.reportValidity();
 };
@@ -48,13 +61,13 @@ priceForNightElement.addEventListener('input', () => {
 
 // check type of housing
 typeOfHousingElement.addEventListener('change', () => {
-  priceForNightElement.min = dictionaryMinPriceForHousing[typeOfHousingElement.value];
+  priceForNightElement.min = getMinPriceHousing(typeOfHousingElement.value);
   priceForNightElement.placeholder = priceForNightElement.min;
 });
 
-const synchronizeTime = (selectedTime, synchronizedTime) => {
-  for(const item of synchronizedTime) {
-    if(item.value === selectedTime) {
+const synchronizeTime = (changeableInput, synchronizedInput) => {
+  for(const item of synchronizedInput) {
+    if(item.value === changeableInput) {
       item.selected = true;
     }
   }
@@ -73,21 +86,22 @@ timeCheckoutElement.addEventListener('change', () => {
 const numberOfRoomsElement = adFormElement.querySelector('#room_number');
 const numberOfGuestsElement = adFormElement.querySelector('#capacity');
 
-const checkRatio = (firstInput, secondInput, eventElement) => {
+const checkRatio = (firstInput, secondInput, currentElement) => {
   let firstValue = firstInput.value;
   firstValue = parseInt(firstValue, 10);
   let secondValue = secondInput.value;
   secondValue = parseInt(secondValue, 10);
-  if (firstValue >= secondValue && secondValue !== 0 && firstValue !== 100) {
-    firstInput.setCustomValidity('');
-    secondInput.setCustomValidity('');
-  }  else if(firstValue === 100 && secondValue === 0) {
-    firstInput.setCustomValidity('');
-    secondInput.setCustomValidity('');
+
+  if (firstValue >= secondValue && secondValue !== 0 && firstValue !== MAX_GUEST) {
+    setValidationMessages(firstInput,'');
+    setValidationMessages(secondInput,'');
+  }  else if(firstValue === MAX_GUEST && secondValue === 0) {
+    setValidationMessages(firstInput,'');
+    setValidationMessages(secondInput,'');
   }  else {
-    eventElement.setCustomValidity('Колличество гостей не соответствует комнате, выберете другой вариант');
+    setValidationMessages(currentElement,'Колличество гостей не соответствует комнате, выберете другой вариант');
   }
-  eventElement.reportValidity();
+  currentElement.reportValidity();
 };
 
 numberOfRoomsElement.addEventListener('change', () => {
@@ -100,6 +114,7 @@ numberOfGuestsElement.addEventListener('change', () => {
 
 window.addEventListener('load', () => {
   synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children);
-  priceForNightElement.min = dictionaryMinPriceForHousing[typeOfHousingElement.value];
+  priceForNightElement.min = getMinPriceHousing(typeOfHousingElement.value);
   priceForNightElement.placeholder = priceForNightElement.min;
 });
+

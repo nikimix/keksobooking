@@ -13,6 +13,12 @@ const onActiveStateFormAd = () => {
     item.removeAttribute('disabled');
   }
 };
+const onActiveStateFormFilter = () => {
+  formFilterElement.classList.remove('map__filters--disabled');
+  for (const item of formFilterElement.children) {
+    item.removeAttribute('disabled');
+  }
+};
 const offActiveStateFormFilter = () => {
   formFilterElement.classList.add('map__filters--disabled');
   for (const item of formFilterElement.children) {
@@ -20,13 +26,7 @@ const offActiveStateFormFilter = () => {
   }
 };
 
-const onActiveStateFormFilter = () => {
-  formFilterElement.classList.remove('map__filters--disabled');
-  for (const item of formFilterElement.children) {
-    item.removeAttribute('disabled');
-  }
-};
 
 offActiveStateFormAd();
 offActiveStateFormFilter();
-export { offActiveStateFormAd, offActiveStateFormFilter, onActiveStateFormAd, onActiveStateFormFilter };
+export { onActiveStateFormAd, onActiveStateFormFilter };

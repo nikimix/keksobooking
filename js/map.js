@@ -1,17 +1,11 @@
-import { createAd } from './template.js';
+import { createAd } from './ad.js';
 import { onActiveStateFormAd } from './form-state.js';
 const LAT = 35.6894;
 const LNG = 139.6920;
-const containerForMap = 'map-canvas';
 const addressElement = document.querySelector('#address');
 
-const setAddressDefault = () => {
-  addressElement.value = `${LAT.toFixed(4)}, ${LNG.toFixed(4)}`;
-};
-
-const map = L.map(containerForMap).on('load', () => {
+const map = L.map('map-canvas').on('load', () => {
   onActiveStateFormAd();
-  setAddressDefault();
 })
   .setView({
     lat: LAT,
@@ -44,40 +38,48 @@ const mainMarker =  L.marker(
   },
 ).addTo(map);
 
-const setCoordinatesMarkerInField = (marker, field) => {
-  const coordinates = marker.getLatLng();
-  field.value = `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
+const setCoordinatesMarkerInField = () => {
+  const coordinates = mainMarker.getLatLng();
+  addressElement.value = `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
+};
+setCoordinatesMarkerInField();
+
+mainMarker.on('moveend', () => {
+  setCoordinatesMarkerInField();
+});
+
+
+const markerGroup = L.layerGroup().addTo(map);
+
+const createMarker = (point) => {
+  const {lat, lng} = point.location;
+  const icon = L.icon({
+    iconUrl: 'img/pin.svg',
+    iconSize: [40,40],
+    iconAnchor: [20,52],
+  });
+  const marker = L.marker(
+    {
+      lat,
+      lng,
+    },
+    {
+      icon,
+    });
+  marker
+    .addTo(markerGroup)
+    .bindPopup(
+      createAd(point),
+      {
+        keepInView: false,
+      },
+    );
 };
 
-mainMarker.on('moveend', (evt) => {
-  setCoordinatesMarkerInField(evt.target, addressElement);
-});
-
-const pinIcon = L.icon({
-  iconUrl : 'img/pin.svg',
-  iconSize : [40,40],
-  iconAnchor : [20,52],
-});
-
-const createPinMarker = (lat, lng) => L.marker(
-  {
-    lat : lat,
-    lng : lng,
-  },
-  {
-    icon: pinIcon,
-  }).addTo(map);
-
-const addAdsToMap = (data) => {
-  // const filteredArray = data.filter(({offer}) => offer.type !== 'flat').slice(0,10);
-  data.forEach(({offer, author, location}) => {
-    createPinMarker(location.lat, location.lng)
-      .bindPopup(
-        createAd({offer, author}),
-        {
-          keepInView: true,
-        },
-      );
+const addAdsToMap = (dataAds) => {
+  markerGroup.clearLayers();
+  dataAds.slice(0,9).forEach((item) => {
+    createMarker(item);
   });
 };
 
@@ -97,12 +99,5 @@ const setPositinMainMarkerDefault = () => {
   );
 };
 
-document.querySelector('.ad-form__reset').addEventListener('click', (evt) => {
-  evt.preventDefault();
-  setAddressDefault();
-  setViewMapDefault();
-  setPositinMainMarkerDefault();
-});
-
 export { addAdsToMap };
-export { setAddressDefault, setViewMapDefault, setPositinMainMarkerDefault };
+export { setCoordinatesMarkerInField, setViewMapDefault, setPositinMainMarkerDefault };
