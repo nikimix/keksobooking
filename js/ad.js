@@ -13,20 +13,22 @@ const getTypeOfHousing = (type) => {
       return 'Отель';
   }
 };
-// const setTextContet = (element, content) => {
+
+// Можно добавить функцию setTextContent и использовать для добавления текстового содержимого в элементы.
+// const setTextContent = (element, content) => {
 //   element.textContent = content;
 // };
 
 // const createAd = ({offer, author}) => {
 //   const ad = templateAd.cloneNode(true);
-//   setTextContet(ad.querySelector('.popup__title'), offer.title);
-//   setTextContet(ad.querySelector('.popup__text--address'), offer.address);
-//   setTextContet(ad.querySelector('.popup__text--price'), `${offer.price} `);
+//   setTextContent(ad.querySelector('.popup__title'), offer.title);
+//   setTextContent(ad.querySelector('.popup__text--address'), offer.address);
+//   setTextContent(ad.querySelector('.popup__text--price'), `${offer.price} `);
 //   ad.querySelector('.popup__text--price').insertAdjacentHTML('beforeend','<span>₽/ночь</span>');
-//   setTextContet(ad.querySelector('.popup__type'), getTypeOfHousing(offer.type);
-//   setTextContet(ad.querySelector('.popup__text--capacity'), `${offer.rooms} комнаты для ${offer.guests} гостей`);
-//   setTextContet(ad.querySelector('.popup__text--time'), `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
-
+//   setTextContent(ad.querySelector('.popup__type'), getTypeOfHousing(offer.type);
+//   setTextContent(ad.querySelector('.popup__text--capacity'), `${offer.rooms} комнаты для ${offer.guests} гостей`);
+//   setTextContent(ad.querySelector('.popup__text--time'), `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
+// Этот условную конструкцию можно описать иначе
 //   if(offer.features) {
 //     const modifiers = offer.features.map((feature) => `popup__feature--${feature}`);
 
@@ -39,9 +41,18 @@ const getTypeOfHousing = (type) => {
 //   } else {
 //     ad.querySelector('.popup__features').remove();
 //   }
-
+// ----------------------------------------------------
+// if(offer.features) {
+// ad.querySelector('.popup__features').innerHTML = '';
+//     offer.features.forEach((feature) => {
+//       ad.querySelector('.popup__features').insertAdjacentHTML('beforeend', `<li class="popup__feature popup__feature--${feature}"></li>`);
+//     });
+// } else {
+//     ad.querySelector('.popup__features').remove();
+//   }
+// ----------------------------------------------------
 //   if(offer.description) {
-//     setTextContet(ad.querySelector('.popup__description'), offer.description);
+//     setTextContent(ad.querySelector('.popup__description'), offer.description);
 //   }
 //   else {
 //     ad.querySelector('.popup__description').remove();
