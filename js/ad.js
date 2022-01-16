@@ -25,27 +25,20 @@ const createAd = ({offer, author}) => {
   setTextContet(ad.querySelector('.popup__type'), getTypeOfHousing(offer.type));
   setTextContet(ad.querySelector('.popup__text--capacity'), `${offer.rooms} комнаты для ${offer.guests} гостей`);
   setTextContet(ad.querySelector('.popup__text--time'), `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
-
   if(offer.features) {
-    const modifiers = offer.features.map((feature) => `popup__feature--${feature}`);
-
-    ad.querySelectorAll('.popup__feature').forEach((item)=>{
-      const modifier = item.classList[1];
-      if(!modifiers.includes(modifier)) {
-        item.remove();
-      }
+    ad.querySelector('.popup__features').innerHTML = '';
+    offer.features.forEach((feature) => {
+      ad.querySelector('.popup__features').insertAdjacentHTML('beforeend',`<li class="popup__feature popup__feature--${feature}"></li>`);
     });
   } else {
     ad.querySelector('.popup__features').remove();
   }
-
   if(offer.description) {
     setTextContet(ad.querySelector('.popup__description'), offer.description);
   }
   else {
     ad.querySelector('.popup__description').remove();
   }
-
   if(offer.photos) {
     ad.querySelector('.popup__photos').innerHTML ='';
     offer.photos.forEach((link) => {
@@ -55,7 +48,6 @@ const createAd = ({offer, author}) => {
   else {
     ad.querySelector('.popup__photos').remove();
   }
-
   if(author.avatar) {
     ad.querySelector('.popup__avatar').src = author.avatar;
   }
