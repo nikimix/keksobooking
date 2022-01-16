@@ -3,7 +3,7 @@ import { showErrorAlert, showSuccessMessage, showErrorMessage } from './api.js';
 import { addAdsToMap } from './map.js';
 
 const getDataAds = (cb) => {
-  fetch('https://23.javascript.pages.academy/keksobooking/data')
+  fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if(response.ok) {
         return response.json();
