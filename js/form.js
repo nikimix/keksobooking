@@ -33,17 +33,14 @@ const setFieldsValueDefault = () => {
   document.querySelector('.ad-form-header__preview').firstElementChild.src = 'img/muffin-grey.svg';
 };
 
-const getAdRank = (ad) => {
-  let rank=0;
+const checkAd = (ad) => {
+  let truth = true;
   const housingTypeInput = document.querySelector('#housing-type');
   const housingPriceInput = document.querySelector('#housing-price');
   const housingRoomsInput = document.querySelector('#housing-rooms');
   const housingGuestsInput = document.querySelector('#housing-guests');
   const housingFeatures = document.querySelectorAll('.map__checkbox');
-  if (housingTypeInput.value === ad.offer.type) {
-    rank+=2;
-  }
-  const countPriceValue = () => {
+  const getPriceValue = () => {
     if(ad.offer.price <= LOW_PRICE) {
       return 'low';
     }
@@ -52,34 +49,67 @@ const getAdRank = (ad) => {
     }
     return 'high';
   };
-  if(housingPriceInput.value === countPriceValue()) {
-    rank+=2;
-  }
-  if(parseInt(housingRoomsInput.value,10) === ad.offer.rooms) {
-    rank+=2;
-  }
-  if(parseInt(housingGuestsInput.value,10) === ad.offer.guests) {
-    rank+=2;
-  }
-  if(ad.offer.features) {
-    for (const index of housingFeatures) {
-      if(index.checked) {
-        if(ad.offer.features.includes(index.value)) {
-          rank +=2;
-        }
-      }
+
+  if(truth){
+    truth = !!((housingTypeInput.value !== 'any' && housingTypeInput.value === ad.offer.type));
+    if(housingTypeInput.value === 'any') {
+      truth = true;
     }
   }
-  return rank;
+  if(truth) {
+    truth = !!((housingPriceInput.value !== 'any' && housingPriceInput.value === getPriceValue()));
+    if(housingPriceInput.value === 'any') {
+      truth = true;
+    }
+  }
+  if(truth) {
+    truth = !!((housingRoomsInput.value !== 'any' && parseInt(housingRoomsInput.value, 10) === ad.offer.rooms));
+    if(housingRoomsInput.value === 'any') {
+      truth = true;
+    }
+  }
+  if(truth) {
+    truth = !!((housingGuestsInput.value !== 'any' && parseInt(housingGuestsInput.value,10) === ad.offer.guests));
+    if(housingGuestsInput.value === 'any') {
+      truth = true;
+    }
+  }
+  if(truth) {
+    const features = [];
+    for (const item of housingFeatures) {
+      if(item.checked) {
+        features.push(item.value);
+      }
+    }
+    if(features.length !== 0) {
+      if(ad.offer.features) {
+        features.forEach((item) => {
+          if(!ad.offer.features.includes(item)) {
+            truth = false;
+          }
+        });
+      } else {
+        return false;
+      }
+    }
+    return truth;
+  }
+  return truth;
 };
 
-const compareAds = (firsAd, secondAd) => {
-  const rankA = getAdRank(firsAd);
-  const rankB = getAdRank(secondAd);
-  return rankB - rankA;
+const onChangeMapFilter = (data) => {
+  const filteredData = [];
+  data.forEach((item) => {
+    if(checkAd(item)) {
+      filteredData.push(item);
+    }
+  });
+  addAdsToMap(filteredData);
 };
 
-const onChangeMapFilter = (data) => addAdsToMap(data.slice().sort(compareAds));
+const resetFiters = (data) => {
+  addAdsToMap(data);
+};
 
 let dataAds;
 const setFilterChangeHandler = (data) => {
@@ -91,7 +121,7 @@ document.querySelector('.ad-form__reset').addEventListener('click', (evt) => {
   evt.preventDefault();
   setFieldsValueDefault();
   if(dataAds) {
-    onChangeMapFilter(dataAds);
+    resetFiters(dataAds);
   }
 });
 
@@ -99,7 +129,7 @@ document.querySelector('.ad-form').addEventListener('submit', (evt) => {
   evt.preventDefault();
   sendUserForm(setFieldsValueDefault);
   if(dataAds) {
-    onChangeMapFilter(dataAds);
+    resetFiters(dataAds);
   }
 });
 

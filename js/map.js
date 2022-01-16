@@ -78,7 +78,7 @@ const createMarker = (point) => {
 
 const addAdsToMap = (dataAds) => {
   markerGroup.clearLayers();
-  dataAds.slice(0,9).forEach((item) => {
+  dataAds.slice(0, 10).forEach((item) => {
     createMarker(item);
   });
 };
