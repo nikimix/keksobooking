@@ -13,7 +13,7 @@ const getTypeOfHousing = (type) => {
       return 'Отель';
   }
 };
-
+// s
 // const setTextContet = (element, content) => {
 //   element.textContent = content;
 // };
