@@ -1,0 +1,60 @@
+const templateAd = document.querySelector('#card').content.querySelector('.popup');
+const getTypeOfHousing = (type) => {
+  switch(type) {
+    case 'flat':
+      return 'Квартира';
+    case 'bungalow':
+      return 'Бунгало';
+    case 'house':
+      return 'Дом';
+    case 'palace':
+      return 'Дворец';
+    case 'hotel':
+      return 'Отель';
+  }
+};
+const setTextContet = (element, content) => {
+  element.textContent = content;
+};
+const createAd = ({offer, author}) => {
+  const ad = templateAd.cloneNode(true);
+  setTextContet(ad.querySelector('.popup__title'), offer.title);
+  setTextContet(ad.querySelector('.popup__text--address'), offer.address);
+  setTextContet(ad.querySelector('.popup__text--price'), `${offer.price} `);
+  ad.querySelector('.popup__text--price').insertAdjacentHTML('beforeend','<span>₽/ночь</span>');
+  setTextContet(ad.querySelector('.popup__type'), getTypeOfHousing(offer.type));
+  setTextContet(ad.querySelector('.popup__text--capacity'), `${offer.rooms} комнаты для ${offer.guests} гостей`);
+  setTextContet(ad.querySelector('.popup__text--time'), `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
+  if(offer.features) {
+    ad.querySelector('.popup__features').innerHTML = '';
+    offer.features.forEach((feature) => {
+      ad.querySelector('.popup__features').insertAdjacentHTML('beforeend',`<li class="popup__feature popup__feature--${feature}"></li>`);
+    });
+  } else {
+    ad.querySelector('.popup__features').remove();
+  }
+  if(offer.description) {
+    setTextContet(ad.querySelector('.popup__description'), offer.description);
+  }
+  else {
+    ad.querySelector('.popup__description').remove();
+  }
+  if(offer.photos) {
+    ad.querySelector('.popup__photos').innerHTML ='';
+    offer.photos.forEach((link) => {
+      ad.querySelector('.popup__photos').insertAdjacentHTML('afterbegin', `<img src="${link}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
+    });
+  }
+  else {
+    ad.querySelector('.popup__photos').remove();
+  }
+  if(author.avatar) {
+    ad.querySelector('.popup__avatar').src = author.avatar;
+  }
+  else {
+    ad.querySelector('.popup__avatar').remove();
+  }
+  return ad;
+};
+
+export {createAd};
