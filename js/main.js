@@ -4,3 +4,4 @@ import { setFilterChangeHandler } from './form.js';
 import './avatar.js';
 
 getDataAds(setFilterChangeHandler);
+
