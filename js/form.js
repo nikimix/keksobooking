@@ -1,24 +1,10 @@
 import { setCoordinatesMarkerInField, setViewMapDefault, setPositinMainMarkerDefault, addAdsToMap } from './map.js';
 import { sendUserForm } from './request.js';
 import { debounce } from './api.js';
+import { setMinPriceAndPlaceholder } from './form-validation.js';
 const LOW_PRICE = 10000;
 const HIGH_PRICE = 50000;
 const RENDER_DELAY = 500;
-
-const getMinPriceHousing = (typeHousing) => {
-  switch(typeHousing) {
-    case 'bungalow':
-      return 0;
-    case 'flat':
-      return 1000;
-    case 'hotel':
-      return 3000;
-    case 'house':
-      return 5000;
-    case 'palace':
-      return 10000;
-  }
-};
 
 const setFieldsValueDefault = () => {
   document.querySelector('.ad-form').reset();
@@ -26,10 +12,8 @@ const setFieldsValueDefault = () => {
   setViewMapDefault();
   setPositinMainMarkerDefault();
   setCoordinatesMarkerInField();
-  document.querySelector('#price').placeholder = getMinPriceHousing(document.querySelector('#type').value);
-  if(document.querySelector('.ad-form__photo').firstElementChild) {
-    document.querySelector('.ad-form__photo').firstElementChild.remove();
-  }
+  setMinPriceAndPlaceholder();
+  document.querySelector('.ad-form__photo').innerHTML = '';
   document.querySelector('.ad-form-header__preview').firstElementChild.src = 'img/muffin-grey.svg';
 };
 
@@ -107,7 +91,7 @@ const onChangeMapFilter = (data) => {
   addAdsToMap(filteredData);
 };
 
-const resetFiters = (data) => {
+const resetFiter = (data) => {
   addAdsToMap(data);
 };
 
@@ -121,7 +105,7 @@ document.querySelector('.ad-form__reset').addEventListener('click', (evt) => {
   evt.preventDefault();
   setFieldsValueDefault();
   if(dataAds) {
-    resetFiters(dataAds);
+    resetFiter(dataAds);
   }
 });
 
@@ -129,7 +113,7 @@ document.querySelector('.ad-form').addEventListener('submit', (evt) => {
   evt.preventDefault();
   sendUserForm(setFieldsValueDefault);
   if(dataAds) {
-    resetFiters(dataAds);
+    resetFiter(dataAds);
   }
 });
 

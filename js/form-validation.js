@@ -25,6 +25,7 @@ const setValidationMessages = (item, message) => {
   item.setCustomValidity(message);
 };
 
+//check Lengh title
 const checkLength = (element) => {
   if(element.validity.tooShort) {
     const minLength = element.getAttribute('minlength');
@@ -35,12 +36,11 @@ const checkLength = (element) => {
   }
   element.reportValidity();
 };
-
-//check Lengh title
 titleAdElement.addEventListener('input', () => {
   checkLength(titleAdElement);
 });
 
+// check price
 const checkMinMax = (element) => {
   if(element.validity.rangeUnderflow) {
     setValidationMessages(element,`Минимальное значение ${element.min}`);
@@ -53,18 +53,20 @@ const checkMinMax = (element) => {
   }
   element.reportValidity();
 };
-
-// check price
 priceForNightElement.addEventListener('input', () => {
   checkMinMax(priceForNightElement);
 });
 
 // check type of housing
-typeOfHousingElement.addEventListener('change', () => {
+const setMinPriceAndPlaceholder = () => {
   priceForNightElement.min = getMinPriceHousing(typeOfHousingElement.value);
   priceForNightElement.placeholder = priceForNightElement.min;
+};
+typeOfHousingElement.addEventListener('change', () => {
+  setMinPriceAndPlaceholder();
 });
 
+// synchronize time
 const synchronizeTime = (changeableInput, synchronizedInput) => {
   for(const item of synchronizedInput) {
     if(item.value === changeableInput) {
@@ -72,12 +74,9 @@ const synchronizeTime = (changeableInput, synchronizedInput) => {
     }
   }
 };
-
-// synchronize time
 timeCheckinElement.addEventListener('change', () => {
   synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children);
 });
-
 timeCheckoutElement.addEventListener('change', () => {
   synchronizeTime(timeCheckoutElement.value, timeCheckinElement.children);
 });
@@ -112,9 +111,4 @@ numberOfGuestsElement.addEventListener('change', () => {
   checkRatio(numberOfRoomsElement, numberOfGuestsElement, numberOfGuestsElement);
 });
 
-window.addEventListener('load', () => {
-  synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children);
-  priceForNightElement.min = getMinPriceHousing(typeOfHousingElement.value);
-  priceForNightElement.placeholder = priceForNightElement.min;
-});
-
+export {setMinPriceAndPlaceholder};

@@ -48,7 +48,6 @@ mainMarker.on('moveend', () => {
   setCoordinatesMarkerInField();
 });
 
-
 const markerGroup = L.layerGroup().addTo(map);
 
 const createMarker = (point) => {

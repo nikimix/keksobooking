@@ -2,8 +2,6 @@ const avatarPreview = document.querySelector('.ad-form-header__preview img');
 const avatarFile = document.querySelector('.ad-form-header__input');
 const housingPreviewContainer = document.querySelector('.ad-form__photo');
 const housingPictureFile = document.querySelector('.ad-form__input');
-
-
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 avatarFile.addEventListener('change', () => {
@@ -17,7 +15,6 @@ avatarFile.addEventListener('change', () => {
   }
 });
 
-
 housingPictureFile.addEventListener('change', () => {
   const file = housingPictureFile.files[0];
   const fileName = file.name.toLowerCase();
@@ -30,3 +27,4 @@ housingPictureFile.addEventListener('change', () => {
     reader.readAsDataURL(file);
   }
 });
+// есть проблемы с пониманием конструкторов.
