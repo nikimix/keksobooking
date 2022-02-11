@@ -18,6 +18,7 @@ const setFieldsValueDefault = () => {
 };
 
 const checkAd = (ad) => {
+  // попробовать написать отдельную универсальную функцию которая возвращает результат проверки. что бы не городить if
   let truth = true;
   const housingTypeInput = document.querySelector('#housing-type');
   const housingPriceInput = document.querySelector('#housing-price');
