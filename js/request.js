@@ -1,6 +1,7 @@
-import { onActiveStateFormFilter } from './form-state.js';
+import { enableFormFilterActiveState } from './form-state.js';
 import { showErrorAlert, showSuccessMessage, showErrorMessage } from './api.js';
 import { addAdsToMap } from './map.js';
+const formFilterElement = document.querySelector('.map__filters');
 
 const getDataAds = (cb) => {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
@@ -13,7 +14,7 @@ const getDataAds = (cb) => {
     })
     .then((response) => {
       addAdsToMap(response);
-      onActiveStateFormFilter();
+      enableFormFilterActiveState(formFilterElement);
       cb(response);
     })
     .catch((err) => {

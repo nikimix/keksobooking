@@ -1,30 +1,17 @@
-const formAdElement = document.querySelector('.ad-form');
-const formFilterElement = document.querySelector('.map__filters');
+function removeAttributesOfChildElements(parentElement, atributte) {
+  for (const item of parentElement.children) {
+    item.removeAttribute(atributte);
+  }
+}
 
-// const offActiveStateFormAd = () => {
-//   formAdElement.classList.add('ad-form--disabled');
-//   for (const item of formAdElement.children) {
-//     item.setAttribute('disabled', '');
-//   }
-// };
-const onActiveStateFormAd = () => {
-  formAdElement.classList.remove('ad-form--disabled');
-  for (const item of formAdElement.children) {
-    item.removeAttribute('disabled');
-  }
-};
-const onActiveStateFormFilter = () => {
-  formFilterElement.classList.remove('map__filters--disabled');
-  for (const item of formFilterElement.children) {
-    item.removeAttribute('disabled');
-  }
-};
-// const offActiveStateFormFilter = () => {
-//   formFilterElement.classList.add('map__filters--disabled');
-//   for (const item of formFilterElement.children) {
-//     item.setAttribute('disabled', '');
-//   }
-// };
-// offActiveStateFormAd();
-// offActiveStateFormFilter();
-export { onActiveStateFormAd, onActiveStateFormFilter };
+function enableFormActiveState(elementForm) {
+  elementForm.classList.remove('ad-form--disabled');
+  removeAttributesOfChildElements(elementForm, 'disabled');
+}
+
+function enableFormFilterActiveState(elementFormFilter) {
+  elementFormFilter.classList.remove('map__filters--disabled');
+  removeAttributesOfChildElements(elementFormFilter, 'disabled');
+}
+
+export { enableFormActiveState, enableFormFilterActiveState };

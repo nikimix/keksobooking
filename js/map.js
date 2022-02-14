@@ -1,11 +1,12 @@
 import { createAd } from './ad.js';
-import { onActiveStateFormAd } from './form-state.js';
+import { enableFormActiveState } from './form-state.js';
 const LAT = 35.6894;
 const LNG = 139.6920;
 const addressElement = document.querySelector('#address');
+const formAdElement = document.querySelector('.ad-form');
 
 const map = L.map('map-canvas').on('load', () => {
-  onActiveStateFormAd();
+  enableFormActiveState(formAdElement);
 })
   .setView({
     lat: LAT,
