@@ -23,7 +23,7 @@ const getDataAds = (cb) => {
 };
 
 const sendUserForm = (resetForm) => {
-  fetch('https://23.javascript.pages.academy/keksobooking',
+  fetch('https://25.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
       body: new FormData(document.querySelector('.ad-form')),
@@ -33,13 +33,10 @@ const sendUserForm = (resetForm) => {
         showSuccessMessage();
         resetForm();
       } else {
-        showErrorMessage();
         throw new Error(`${response.status} ${response.statusText}`);
       }
     })
-    .catch(() => {
-      showErrorMessage();
-    });
+    .catch(() => showErrorMessage());
 };
 
 export {getDataAds, sendUserForm};

@@ -1,18 +1,22 @@
 import { setCoordinatesMarkerInField, setViewMapDefault, setPositinMainMarkerDefault, addAdsToMap } from './map.js';
 import { sendUserForm } from './request.js';
 import { debounce } from './api.js';
-import { setMinPriceAndPlaceholder } from './form-validation.js';
+import { changeMinAndPlaceholderValue } from './validation.js';
 const LOW_PRICE = 10000;
 const HIGH_PRICE = 50000;
 const RENDER_DELAY = 500;
 
+const adFormElement = document.querySelector('.ad-form');
+const adFormFilterElement = document.querySelector('.map__filters');
+const priceForNightElement = adFormElement.querySelector('#price');
+
 const setFieldsValueDefault = () => {
-  document.querySelector('.ad-form').reset();
-  document.querySelector('.map__filters').reset();
+  adFormElement.reset();
+  adFormFilterElement.reset();
   setViewMapDefault();
   setPositinMainMarkerDefault();
   setCoordinatesMarkerInField();
-  setMinPriceAndPlaceholder();
+  changeMinAndPlaceholderValue(priceForNightElement);
   document.querySelector('.ad-form__photo').innerHTML = '';
   document.querySelector('.ad-form-header__preview').firstElementChild.src = 'img/muffin-grey.svg';
 };
