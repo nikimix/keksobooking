@@ -22,20 +22,10 @@ function getMinPriceHousing(typeHousing) {
   }
 }
 
-function setEventListener(element, typeEvent, cb) {
-  element.addEventListener(typeEvent, cb);
-}
-
 function changeMinAndPlaceholderValue(element, minValue = getMinPriceHousing(typeOfHousingElement.value)) {
   element.min = minValue;
   element.placeholder = element.min;
 }
-
-setEventListener(titleAdElement, 'input', () => titleAdElement.reportValidity());
-
-setEventListener(priceForNightElement, 'input', () => priceForNightElement.reportValidity());
-
-setEventListener(typeOfHousingElement, 'change', () => changeMinAndPlaceholderValue(priceForNightElement));
 
 function synchronizeTime(currentTime, sinhronizedTime) {
   for(const hour of sinhronizedTime) {
@@ -44,10 +34,6 @@ function synchronizeTime(currentTime, sinhronizedTime) {
     }
   }
 }
-
-setEventListener(timeCheckinElement, 'change', () => synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children));
-
-setEventListener(timeCheckoutElement, 'change', () => synchronizeTime(timeCheckoutElement.value, timeCheckinElement.children));
 
 function checkNumberOfSeatsInRoom(rooms, seats, changedInput) {
   const room = Number(rooms.value);
@@ -66,8 +52,23 @@ function checkNumberOfSeatsInRoom(rooms, seats, changedInput) {
   changedInput.reportValidity();
 }
 
-setEventListener(numberOfRoomsElement, 'change', () => checkNumberOfSeatsInRoom(numberOfRoomsElement, numberOfSeatsElement, numberOfRoomsElement));
+function setEventListenersOnValidationElements() {
 
-setEventListener(numberOfSeatsElement, 'change', () => checkNumberOfSeatsInRoom(numberOfRoomsElement, numberOfSeatsElement, numberOfSeatsElement));
+  titleAdElement.addEventListener('input', () => titleAdElement.reportValidity());
+
+  priceForNightElement.addEventListener('input', () => priceForNightElement.reportValidity());
+
+  typeOfHousingElement.addEventListener('change', () => changeMinAndPlaceholderValue(priceForNightElement));
+
+  timeCheckinElement.addEventListener('change', () => synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children));
+
+  timeCheckoutElement.addEventListener('change', () => synchronizeTime(timeCheckoutElement.value, timeCheckinElement.children));
+
+  numberOfRoomsElement.addEventListener('change', () => checkNumberOfSeatsInRoom(numberOfRoomsElement, numberOfSeatsElement, numberOfRoomsElement));
+
+  numberOfSeatsElement.addEventListener('change', () => checkNumberOfSeatsInRoom(numberOfRoomsElement, numberOfSeatsElement, numberOfSeatsElement));
+}
+
+setEventListenersOnValidationElements();
 
 export { changeMinAndPlaceholderValue };
