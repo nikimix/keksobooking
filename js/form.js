@@ -1,4 +1,4 @@
-import { setCoordinatesMarkerInField, setViewMapDefault, setPositinMainMarkerDefault, addAdsToMap } from './map.js';
+import { setMarkerCoordinatesInAddress, setViewMapDefault, setPositinMainMarkerDefault, addAdsToMap } from './map.js';
 import { sendUserForm } from './request.js';
 import { debounce } from './api.js';
 import { changeMinAndPlaceholderValue } from './validation.js';
@@ -10,16 +10,16 @@ const adFormElement = document.querySelector('.ad-form');
 const adFormFilterElement = document.querySelector('.map__filters');
 const priceForNightElement = adFormElement.querySelector('#price');
 
-const setFieldsValueDefault = () => {
+function setFieldsValueDefault() {
   adFormElement.reset();
   adFormFilterElement.reset();
   setViewMapDefault();
   setPositinMainMarkerDefault();
-  setCoordinatesMarkerInField();
+  setMarkerCoordinatesInAddress();
   changeMinAndPlaceholderValue(priceForNightElement);
   document.querySelector('.ad-form__photo').innerHTML = '';
   document.querySelector('.ad-form-header__preview').firstElementChild.src = 'img/muffin-grey.svg';
-};
+}
 
 function getStringPriceValue(number) {
   if(number <= LOW_PRICE) {
@@ -54,7 +54,7 @@ function getCurrentFiltersValues() {
   return [type, price, roomOfNumber, guestOfNumbers, features.join('')];
 }
 
-function getStringAdValuesForValidate(ad) {
+function getStringAdValues(ad) {
   const housingType = ad.offer.type;
   const housingPrice = getStringPriceValue(ad.offer.price);
   const numberOfRooms = String(ad.offer.rooms);
@@ -72,6 +72,7 @@ function getStringAdValuesForValidate(ad) {
 }
 
 function checkMatchesAdToFilters(adValues, filterValues) {
+
   for(let index = 0; index < filterValues.length; index++) {
     if(filterValues[index] === 'any') {
       continue;
@@ -81,29 +82,30 @@ function checkMatchesAdToFilters(adValues, filterValues) {
       return false;
     }
   }
+
   return true;
 }
 
-const onChangeMapFilter = (data) => {
+function onChangeMapFilter(data) {
   const currentFilterValues = getCurrentFiltersValues();
-  const filteredData = [];
+  const filteredAds = [];
   data.forEach((item) => {
-    if(checkMatchesAdToFilters(getStringAdValuesForValidate(item), currentFilterValues)) {
-      filteredData.push(item);
+    if(checkMatchesAdToFilters(getStringAdValues(item), currentFilterValues)) {
+      filteredAds.push(item);
     }
   });
-  addAdsToMap(filteredData);
-};
+  addAdsToMap(filteredAds);
+}
 
 const resetFiter = (data) => {
   addAdsToMap(data);
 };
 
 let dataAds;
-const setFilterChangeHandler = (data) => {
+function setFilterChangeHandler (data) {
   document.querySelector('.map__filters').addEventListener('change', debounce(() => onChangeMapFilter(data), RENDER_DELAY));
   dataAds = data;
-};
+}
 
 document.querySelector('.ad-form__reset').addEventListener('click', (evt) => {
   evt.preventDefault();

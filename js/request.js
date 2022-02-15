@@ -3,7 +3,7 @@ import { showErrorAlert, showSuccessMessage, showErrorMessage } from './api.js';
 import { addAdsToMap } from './map.js';
 const formFilterElement = document.querySelector('.map__filters');
 
-const getDataAds = (cb) => {
+function getDataAds(cb) {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if(response.ok) {
@@ -20,9 +20,9 @@ const getDataAds = (cb) => {
     .catch((err) => {
       showErrorAlert(err);
     });
-};
+}
 
-const sendUserForm = (resetForm) => {
+function sendUserForm(resetForm) {
   fetch('https://25.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
@@ -37,6 +37,6 @@ const sendUserForm = (resetForm) => {
       }
     })
     .catch(() => showErrorMessage());
-};
+}
 
 export {getDataAds, sendUserForm};

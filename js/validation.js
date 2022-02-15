@@ -1,28 +1,21 @@
 const adFormElement = document.querySelector('.ad-form');
 const titleAdElement = adFormElement.querySelector('#title');
 const priceForNightElement = adFormElement.querySelector('#price');
-const typeOfHousingElement = adFormElement.querySelector('#type');
+const housingType = adFormElement.querySelector('#type');
 const timeCheckinElement = adFormElement.querySelector('#timein');
 const timeCheckoutElement = adFormElement.querySelector('#timeout');
 const numberOfRoomsElement = adFormElement.querySelector('#room_number');
 const numberOfSeatsElement = adFormElement.querySelector('#capacity');
 
-function getMinPriceHousing(typeHousing) {
-  switch(typeHousing) {
-    case 'bungalow':
-      return 0;
-    case 'flat':
-      return 1000;
-    case 'hotel':
-      return 3000;
-    case 'house':
-      return 5000;
-    case 'palace':
-      return 10000;
-  }
-}
+const minPriceHousing = {
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
 
-function changeMinAndPlaceholderValue(element, minValue = getMinPriceHousing(typeOfHousingElement.value)) {
+function changeMinAndPlaceholderValue(element, minValue = minPriceHousing[housingType.value]) {
   element.min = minValue;
   element.placeholder = element.min;
 }
@@ -58,7 +51,7 @@ function setEventListenersOnValidationElements() {
 
   priceForNightElement.addEventListener('input', () => priceForNightElement.reportValidity());
 
-  typeOfHousingElement.addEventListener('change', () => changeMinAndPlaceholderValue(priceForNightElement));
+  housingType.addEventListener('change', () => changeMinAndPlaceholderValue(priceForNightElement));
 
   timeCheckinElement.addEventListener('change', () => synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children));
 

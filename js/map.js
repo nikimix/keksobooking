@@ -39,19 +39,24 @@ const mainMarker =  L.marker(
   },
 ).addTo(map);
 
-const setCoordinatesMarkerInField = () => {
-  const coordinates = mainMarker.getLatLng();
-  addressElement.value = `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
-};
-setCoordinatesMarkerInField();
+function getMarkerCoordinates(marker) {
+  const coordinates = marker.getLatLng();
+  return `${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(4)}`;
+}
+
+function setMarkerCoordinatesInAddress(element = addressElement, marker = mainMarker) {
+  element.value = getMarkerCoordinates(marker);
+}
+
+setMarkerCoordinatesInAddress();
 
 mainMarker.on('moveend', () => {
-  setCoordinatesMarkerInField();
+  setMarkerCoordinatesInAddress();
 });
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const createMarker = (point) => {
+function createMarker(point) {
   const {lat, lng} = point.location;
   const icon = L.icon({
     iconUrl: 'img/pin.svg',
@@ -74,30 +79,28 @@ const createMarker = (point) => {
         keepInView: false,
       },
     );
-};
+}
 
-const addAdsToMap = (dataAds) => {
+function addAdsToMap(ads) {
   markerGroup.clearLayers();
-  dataAds.slice(0, 10).forEach((item) => {
-    createMarker(item);
-  });
-};
+  ads.slice(0, 10).forEach((ad) => createMarker(ad));
+}
 
-const setViewMapDefault = () => {
+function setViewMapDefault() {
   map.setView({
     lat: LAT,
     lng: LNG,
   },10);
-};
+}
 
-const setPositinMainMarkerDefault = () => {
+function setPositinMainMarkerDefault() {
   mainMarker.setLatLng(
     {
       lat: LAT,
       lng: LNG,
     },
   );
-};
+}
 
 export { addAdsToMap };
-export { setCoordinatesMarkerInField, setViewMapDefault, setPositinMainMarkerDefault };
+export { setMarkerCoordinatesInAddress, setViewMapDefault, setPositinMainMarkerDefault };
