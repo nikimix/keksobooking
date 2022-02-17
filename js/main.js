@@ -1,6 +1,6 @@
-import './validation.js';
 import { getDataAds } from './request.js';
-import { setFilterChangeHandler } from './form.js';
-import './avatar.js';
+import './validation.js';
+import './photo.js';
+import './form.js';
 
-getDataAds(setFilterChangeHandler);
+getDataAds();

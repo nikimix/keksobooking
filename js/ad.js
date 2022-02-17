@@ -1,4 +1,5 @@
 const adTemplateElement = document.querySelector('#card').content.querySelector('.popup');
+
 const housingTypeDictionary = {
   flat: 'Квартира',
   bungalow: 'Бунгало',

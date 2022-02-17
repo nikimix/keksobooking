@@ -1,13 +1,13 @@
 const adFormElement = document.querySelector('.ad-form');
-const titleAdElement = adFormElement.querySelector('#title');
+const adTitleElement = adFormElement.querySelector('#title');
 const priceForNightElement = adFormElement.querySelector('#price');
-const housingType = adFormElement.querySelector('#type');
-const timeCheckinElement = adFormElement.querySelector('#timein');
-const timeCheckoutElement = adFormElement.querySelector('#timeout');
+const housingTypeElement = adFormElement.querySelector('#type');
+const checkinTimeElement = adFormElement.querySelector('#timein');
+const checkoutTimeElement = adFormElement.querySelector('#timeout');
 const numberOfRoomsElement = adFormElement.querySelector('#room_number');
 const numberOfSeatsElement = adFormElement.querySelector('#capacity');
 
-const minPriceHousing = {
+const minHosuingPrice = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
@@ -15,7 +15,7 @@ const minPriceHousing = {
   palace: 10000,
 };
 
-function changeMinAndPlaceholderValue(element, minValue = minPriceHousing[housingType.value]) {
+function changeMinAndPlaceholderValue(element, minValue = minHosuingPrice[housingTypeElement.value]) {
   element.min = minValue;
   element.placeholder = element.min;
 }
@@ -47,15 +47,15 @@ function checkNumberOfSeatsInRoom(rooms, seats, changedInput) {
 
 function setEventListenersOnValidationElements() {
 
-  titleAdElement.addEventListener('input', () => titleAdElement.reportValidity());
+  adTitleElement.addEventListener('input', () => adTitleElement.reportValidity());
 
   priceForNightElement.addEventListener('input', () => priceForNightElement.reportValidity());
 
-  housingType.addEventListener('change', () => changeMinAndPlaceholderValue(priceForNightElement));
+  housingTypeElement.addEventListener('change', () => changeMinAndPlaceholderValue(priceForNightElement));
 
-  timeCheckinElement.addEventListener('change', () => synchronizeTime(timeCheckinElement.value, timeCheckoutElement.children));
+  checkinTimeElement.addEventListener('change', () => synchronizeTime(checkinTimeElement.value, checkoutTimeElement.children));
 
-  timeCheckoutElement.addEventListener('change', () => synchronizeTime(timeCheckoutElement.value, timeCheckinElement.children));
+  checkoutTimeElement.addEventListener('change', () => synchronizeTime(checkoutTimeElement.value, checkinTimeElement.children));
 
   numberOfRoomsElement.addEventListener('change', () => checkNumberOfSeatsInRoom(numberOfRoomsElement, numberOfSeatsElement, numberOfRoomsElement));
 

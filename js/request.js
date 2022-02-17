@@ -1,42 +1,48 @@
+import { addAdsToMap, resetMap } from './map.js';
 import { enableFormFilterActiveState } from './form-state.js';
-import { showErrorAlert, showSuccessMessage, showErrorMessage } from './api.js';
-import { addAdsToMap } from './map.js';
-const formFilterElement = document.querySelector('.map__filters');
+import { onFilterChange } from './filter.js';
+import { showErrorMessage, showSuccessMessage, showUnsuccessMessage } from './message.js';
+import { resetPhoto } from './photo.js';
+const adFilterElement = document.querySelector('.map__filters');
+const adFormElement = document.querySelector('.ad-form');
 
-function getDataAds(cb) {
+function getDataAds() {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if(response.ok) {
         return response.json();
-      } else {
-        throw new Error(`${response.status} ${response.statusText}`);
       }
+      throw new Error(`${response.status} ${response.statusText}`);
     })
     .then((response) => {
       addAdsToMap(response);
-      enableFormFilterActiveState(formFilterElement);
-      cb(response);
+      enableFormFilterActiveState(adFilterElement);
+      onFilterChange(response);
     })
     .catch((err) => {
-      showErrorAlert(err);
+      showErrorMessage(err);
     });
 }
 
-function sendUserForm(resetForm) {
+function sendUserForm() {
   fetch('https://25.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
-      body: new FormData(document.querySelector('.ad-form')),
+      body: new FormData(adFormElement),
     })
     .then((response) => {
       if(response.ok) {
         showSuccessMessage();
-        resetForm();
+        adFormElement.reset();
+        adFilterElement.reset();
+        resetMap();
+        resetPhoto();
+        getDataAds();
       } else {
         throw new Error(`${response.status} ${response.statusText}`);
       }
     })
-    .catch(() => showErrorMessage());
+    .catch(showUnsuccessMessage);
 }
 
-export {getDataAds, sendUserForm};
+export { getDataAds, sendUserForm };
