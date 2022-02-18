@@ -24,6 +24,14 @@ function getDataAds() {
     });
 }
 
+function resetForm() {
+  adFormElement.reset();
+  adFilterElement.reset();
+  resetMap();
+  resetPhoto();
+  getDataAds();
+}
+
 function sendUserForm() {
   fetch('https://25.javascript.pages.academy/keksobooking',
     {
@@ -33,11 +41,7 @@ function sendUserForm() {
     .then((response) => {
       if(response.ok) {
         showSuccessMessage();
-        adFormElement.reset();
-        adFilterElement.reset();
-        resetMap();
-        resetPhoto();
-        getDataAds();
+        resetForm();
       } else {
         throw new Error(`${response.status} ${response.statusText}`);
       }
@@ -45,4 +49,4 @@ function sendUserForm() {
     .catch(showUnsuccessMessage);
 }
 
-export { getDataAds, sendUserForm };
+export { getDataAds, sendUserForm, resetForm };
