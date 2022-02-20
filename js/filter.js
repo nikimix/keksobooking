@@ -2,61 +2,67 @@ import { addAdsToMap } from './map.js';
 
 const LOW_PRICE = 10000;
 const HIGH_PRICE = 50000;
-const RENDER_DELAY = 500;
 const adFilterElement = document.querySelector('.map__filters');
 
 function getStringPriceValue(number) {
   if(number <= LOW_PRICE) {
     return 'low';
-  } else if(number >= HIGH_PRICE) {
+  }
+
+  if(number >= HIGH_PRICE) {
     return 'high';
   }
 
   return 'middle';
 }
 
-function getCurrentFiltersValues() {
-  const type = document.querySelector('#housing-type').value;
-  const price = document.querySelector('#housing-price').value;
-  const numberRooms = document.querySelector('#housing-rooms').value;
-  const numberGuests = document.querySelector('#housing-guests').value;
-  const features = [];
-  const housingFeatures = document.querySelectorAll('.map__checkbox');
+function getFilterFeatures() {
+  const selectedFeatures = document.querySelectorAll('.map__checkbox:checked');
 
-  housingFeatures.forEach((feature) => {
-    if(feature.checked) {
-      features.push(feature.value);
-    }
-  });
-
-  if(features.length === 0) {
-    features.push('any');
-  } else {
-    features.sort((firstFeature, secondFeature) => (firstFeature > secondFeature) ? 1 : -1);
+  if (selectedFeatures.length > 0) {
+    return Array.from(selectedFeatures).map((feature) => feature.value).sort().join(', ');
   }
 
-  return [type, price, numberRooms, numberGuests, features.join('')];
+  return 'any';
+}
+
+function getFilterElements() {
+  return {
+    housingType: document.querySelector('#housing-type').value,
+    housingPrice: document.querySelector('#housing-price').value,
+    numberRooms: document.querySelector('#housing-rooms').value,
+    numberGuests: document.querySelector('#housing-guests').value,
+    housingFeatures: getFilterFeatures(),
+  };
+}
+
+function getCurrentFiltersValues() {
+  const {housingType, housingPrice, numberRooms, numberGuests, housingFeatures} = getFilterElements();
+
+  return [housingType, housingPrice, numberRooms, numberGuests, housingFeatures];
+}
+
+function getAdFeatures(features) {
+  const housingFeatures = features;
+
+  if(housingFeatures) {
+    return Array.from(housingFeatures).map((feature) => feature).sort().join(', ');
+  }
+
+  return '';
 }
 
 function getStringAdValues(ad) {
   const housingType = ad.offer.type;
   const housingPrice = getStringPriceValue(ad.offer.price);
-  const numberOfRooms = String(ad.offer.rooms);
-  const numberOfGuests = String(ad.offer.guests);
-  const housingFeatures = [];
+  const numberOfRooms = `${ad.offer.numberRooms}`;
+  const numberOfGuests = `${ad.offer.guests}`;
+  const housingFeatures = getAdFeatures(ad.offer.features);
 
-  if(ad.offer.features) {
-    ad.offer.features.forEach((item) => housingFeatures.push(item));
-    housingFeatures.sort((firstFeature, secondFeature) => (firstFeature > secondFeature) ? 1 : -1);
-  } else {
-    housingFeatures.push('');
-  }
-
-  return [housingType, housingPrice, numberOfRooms, numberOfGuests, housingFeatures.join('')];
+  return [housingType, housingPrice, numberOfRooms, numberOfGuests, housingFeatures];
 }
 
 function isMatchAdToFilters(adValues, filtersValues) {
-
   for(let index = 0; index < filtersValues.length; index++) {
     if(filtersValues[index] === 'any') {
       continue;
@@ -71,15 +77,9 @@ function isMatchAdToFilters(adValues, filtersValues) {
 }
 
 function filterAds(ads) {
-  const filteredAds = [];
   const currentFiltersValues = getCurrentFiltersValues();
 
-  ads.forEach((ad) => {
-    if(isMatchAdToFilters(getStringAdValues(ad), currentFiltersValues)) {
-      filteredAds.push(ad);
-    }
-  });
-  addAdsToMap(filteredAds);
+  addAdsToMap(ads.filter((ad) => isMatchAdToFilters(getStringAdValues(ad), currentFiltersValues)));
 }
 
 function debounce(cb, time = 500) {
@@ -90,8 +90,8 @@ function debounce(cb, time = 500) {
   };
 }
 
-function onFilterChange(ads) {
-  adFilterElement.addEventListener('change', debounce(() => filterAds(ads), RENDER_DELAY));
+function onFilterChange(cb) {
+  adFilterElement.addEventListener('change', cb);
 }
 
-export { onFilterChange };
+export { onFilterChange, debounce, filterAds };

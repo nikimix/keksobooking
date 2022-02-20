@@ -1,10 +1,12 @@
 import { addAdsToMap, resetMap } from './map.js';
 import { enableFormFilterActiveState } from './form-state.js';
-import { onFilterChange } from './filter.js';
+import { onFilterChange, debounce, filterAds } from './filter.js';
 import { showErrorMessage, showSuccessMessage, showUnsuccessMessage } from './message.js';
 import { resetPhoto } from './photo.js';
 const adFilterElement = document.querySelector('.map__filters');
 const adFormElement = document.querySelector('.ad-form');
+const RENDER_DELAY = 500;
+
 
 function getDataAds() {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
@@ -17,7 +19,7 @@ function getDataAds() {
     .then((response) => {
       addAdsToMap(response);
       enableFormFilterActiveState(adFilterElement);
-      onFilterChange(response);
+      onFilterChange(debounce(() => filterAds(response), RENDER_DELAY));
     })
     .catch((err) => {
       showErrorMessage(err);
