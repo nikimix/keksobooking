@@ -16,10 +16,18 @@ function getStringPriceValue(number) {
   return 'middle';
 }
 
-function getFilterFeatures() {
-  const selectedFeatures = document.querySelectorAll('.map__checkbox:checked');
+function getFeatures(features) {
+  const selectedFeatures = features;
 
-  if (selectedFeatures.length > 0) {
+  if (selectedFeatures === undefined) {
+    return '';
+  }
+
+  if(Array.isArray(selectedFeatures)) {
+    return Array.from(selectedFeatures).map((feature) => feature).sort().join(', ');
+  }
+
+  if(selectedFeatures.length > 0) {
     return Array.from(selectedFeatures).map((feature) => feature.value).sort().join(', ');
   }
 
@@ -32,7 +40,7 @@ function getFilterElements() {
     housingPrice: document.querySelector('#housing-price').value,
     numberRooms: document.querySelector('#housing-rooms').value,
     numberGuests: document.querySelector('#housing-guests').value,
-    housingFeatures: getFilterFeatures(),
+    housingFeatures: getFeatures(document.querySelectorAll('.map__checkbox:checked')),
   };
 }
 
@@ -42,22 +50,12 @@ function getCurrentFiltersValues() {
   return [housingType, housingPrice, numberRooms, numberGuests, housingFeatures];
 }
 
-function getAdFeatures(features) {
-  const housingFeatures = features;
-
-  if(housingFeatures) {
-    return Array.from(housingFeatures).map((feature) => feature).sort().join(', ');
-  }
-
-  return '';
-}
-
 function getStringAdValues(ad) {
   const housingType = ad.offer.type;
   const housingPrice = getStringPriceValue(ad.offer.price);
   const numberOfRooms = `${ad.offer.numberRooms}`;
   const numberOfGuests = `${ad.offer.guests}`;
-  const housingFeatures = getAdFeatures(ad.offer.features);
+  const housingFeatures = getFeatures(ad.offer.features);
 
   return [housingType, housingPrice, numberOfRooms, numberOfGuests, housingFeatures];
 }

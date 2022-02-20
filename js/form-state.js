@@ -1,4 +1,4 @@
-function removeAttributesOfChildElements(parentElement, atributte) {
+function removeAttributesOfChilds(parentElement, atributte) {
   for (const item of parentElement.children) {
     item.removeAttribute(atributte);
   }
@@ -6,12 +6,12 @@ function removeAttributesOfChildElements(parentElement, atributte) {
 
 function enableFormActiveState(elementForm) {
   elementForm.classList.remove('ad-form--disabled');
-  removeAttributesOfChildElements(elementForm, 'disabled');
+  removeAttributesOfChilds(elementForm, 'disabled');
 }
 
-function enableFormFilterActiveState(elementFormFilter) {
-  elementFormFilter.classList.remove('map__filters--disabled');
-  removeAttributesOfChildElements(elementFormFilter, 'disabled');
+function enableFormFilterActiveState(elementFilter) {
+  elementFilter.classList.remove('map__filters--disabled');
+  removeAttributesOfChilds(elementFilter, 'disabled');
 }
 
 export { enableFormActiveState, enableFormFilterActiveState };
