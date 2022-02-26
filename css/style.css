@@ -988,10 +988,6 @@ fieldset {
   font-size: 30px;
   text-align: center;
   background-color: red;
-  display: none;
-}
-
-.error__alert--show {
   display: block;
 }
 

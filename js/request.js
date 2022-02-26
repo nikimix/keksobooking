@@ -1,44 +1,54 @@
-import { onActiveStateFormFilter } from './form-state.js';
-import { showErrorAlert, showSuccessMessage, showErrorMessage } from './api.js';
-import { addAdsToMap } from './map.js';
+import { addAdsToMap, resetMap } from './map.js';
+import { enableFormFilterActiveState } from './form-state.js';
+import { onFilterChange, debounce, filterAds } from './filter.js';
+import { showErrorMessage, showSuccessMessage, showUnsuccessMessage } from './message.js';
+import { resetPhoto } from './photo.js';
+const adFilterElement = document.querySelector('.map__filters');
+const adFormElement = document.querySelector('.ad-form');
+const RENDER_DELAY = 500;
 
-const getDataAds = (cb) => {
+
+function getDataAds() {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if(response.ok) {
         return response.json();
-      } else {
-        throw new Error(`${response.status} ${response.statusText}`);
       }
+      throw new Error(`${response.status} ${response.statusText}`);
     })
     .then((response) => {
       addAdsToMap(response);
-      onActiveStateFormFilter();
-      cb(response);
+      enableFormFilterActiveState(adFilterElement);
+      onFilterChange(debounce(() => filterAds(response), RENDER_DELAY));
     })
     .catch((err) => {
-      showErrorAlert(err);
+      showErrorMessage(err);
     });
-};
+}
 
-const sendUserForm = (resetForm) => {
-  fetch('https://23.javascript.pages.academy/keksobooking',
+function resetForm() {
+  adFormElement.reset();
+  adFilterElement.reset();
+  resetMap();
+  resetPhoto();
+  getDataAds();
+}
+
+function sendUserForm() {
+  fetch('https://25.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
-      body: new FormData(document.querySelector('.ad-form')),
+      body: new FormData(adFormElement),
     })
     .then((response) => {
       if(response.ok) {
         showSuccessMessage();
         resetForm();
       } else {
-        showErrorMessage();
         throw new Error(`${response.status} ${response.statusText}`);
       }
     })
-    .catch(() => {
-      showErrorMessage();
-    });
-};
+    .catch(showUnsuccessMessage);
+}
 
-export {getDataAds, sendUserForm};
+export { getDataAds, sendUserForm, resetForm };
